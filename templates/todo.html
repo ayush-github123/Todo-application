@@ -1,0 +1,127 @@
+{% extends "main.html" %}
+
+{% block style %}
+.todo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.todo-box {
+    width: 500px;
+    padding: 30px;
+    background: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+.todo-box h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 24px;
+    color: #333;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.todo-item li {
+    margin: 0;
+    padding: 0;
+}
+
+.todo-item a {
+    color: #555;
+    font-size: 18px;
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.3s;
+}
+
+.todo-item a:hover {
+    color: #007bff;
+}
+
+.add-todo {
+    margin-top: 20px;
+}
+
+.add-todo input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.add-todo input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#add-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#add-btn:hover {
+    background-color: #218838;
+}
+{% endblock %}
+
+{% block content %}
+<div class="todo-container">
+    <div class="todo-box">
+        <h2>My To-Do List</h2>
+        
+        <ul class="todo-list">
+            {% for task in tasks %}
+                <li class="todo-item">
+                    <span>{{ task.title }}</span>
+                    <div>
+                        <a href="{% url 'edit-task' task.id %}" title="Edit Task"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'delete-task' task.id %}" title="Delete Task"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No tasks available. Add one!</li>
+            {% endfor %}
+        </ul>
+        
+        <div class="add-todo">
+            <form action="{% url 'todo' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="New task" id="todo-input" name="add_task" required>
+                <button id="add-btn">Add Task</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
